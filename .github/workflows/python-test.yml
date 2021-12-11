@@ -1,0 +1,57 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9.6]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install nodejs
+          sudo apt install npm
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
+          poetry install
+      - name: Linting, formatting and file checks
+        run: |
+          poetry run pre-commit run --all-files
+      - name: Prepare Selenium
+        uses: nanasess/setup-chromedriver@v1.0.5
+      - name: Tailwind compile
+        run: |
+          npm i
+          npm run build
+      - name: Running static file collection
+        run: |
+          poetry run python manage.py collectstatic --no-input
+      - name: Running migration
+        run: |
+          poetry run python manage.py migrate --no-input
+      - name: Test using django
+        run: |
+          cp dev.env .env
+          poetry run python manage.py test
+          rm .env
+      - name: Django Security Check
+        run: |
+          cp prod.env .env
+          poetry run python manage.py check --deploy --fail-level WARNING
+          rm .env
