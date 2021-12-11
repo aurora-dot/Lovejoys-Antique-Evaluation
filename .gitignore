@@ -133,3 +133,5 @@ dmypy.json
 .vscode
 
 node_modules
+
+app/static/app/css/tailwind-output.css
