@@ -1,0 +1,32 @@
+{
+  "name": "jstoolchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "watch": {
+    "build": {
+      "patterns": [
+        "app/templates/app"
+      ],
+      "extensions": "html"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npm-watch",
+    "build": "postcss jstoolchain/css/tailwind.css -o app/static/app/css/tailwind-output.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.3.1",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.2.7"
+  },
+  "devDependencies": {
+    "npm-watch": "^0.11.0",
+    "pa11y": "^6.0.1",
+    "pa11y-ci": "^2.4.2"
+  }
+}

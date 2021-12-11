@@ -1,0 +1,44 @@
+{
+  "name": "Lovejoy's Antique Evaluation",
+  "description": "Computer Security Coursework",
+  "repository": "https://github.com/aurora-dot/Lovejoys-Antique-Evaluation",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-google-chrome.git"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-chromedriver.git"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+    },
+    {
+      "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-python.git"
+    }
+  ],
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev"
+    }
+  ],
+  "env": {
+    "DJANGO_SUPERUSER_USERNAME": {
+      "required": true
+    },
+    "DJANGO_SUPERUSER_EMAIL": {
+      "required": true
+    },
+    "DJANGO_SUPERUSER_PASSWORD": {
+      "required": true
+    },
+    "DJANGO_SECRET_KEY": {
+      "required": true
+    },
+    "USE_HEROKU": {
+      "required": true
+    }
+  }
+}
