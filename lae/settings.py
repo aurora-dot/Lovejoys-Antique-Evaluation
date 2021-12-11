@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import django_heroku
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,14 +21,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&1%b*opje#zih)7cgzg#aqc)c)*280gj^7$+e%e0q3&q1(gi9f"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ENV = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    DJANGO_SECRET_KEY=(str, "R%MtBmjWn4Qrk3&$7@AxyJvkQy4hxvN%Tt!ugdrKMfm4imMFL2v"),
+    SITENAME=(str, "*"),
+    USE_HEROKU=(bool, False),
+)
 
-ALLOWED_HOSTS = []
-
+DEBUG = ENV("DEBUG")
+SECRET_KEY = ENV("DJANGO_SECRET_KEY")
+ALLOWED_HOSTS = [ENV("SITENAME")]
+USE_HEROKU = ENV("USE_HEROKU")
+ALLOWED_HOSTS = [ENV("SITENAME")]
 
 # Application definition
 
@@ -103,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-gb"
 
 TIME_ZONE = "UTC"
 
@@ -123,3 +131,18 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 60
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+
+# Heroku settings
+
+if USE_HEROKU:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    django_heroku.settings(locals(), staticfiles=False)
