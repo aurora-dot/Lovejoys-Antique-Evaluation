@@ -19,12 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-def trigger_error(request):  # noqa: F841
-    division_by_zero = 1 / 0  # noqa: F841
-
-
 urlpatterns = [
-    path("sentry-debug/", trigger_error),
     path("admin/", admin.site.urls),
     path("", include("app.urls")),
 ]
