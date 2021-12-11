@@ -35,10 +35,7 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0,<1"
 platformdirs = ">=2"
 tomli = ">=0.2.6,<2.0.0"
-typing-extensions = [
-    {version = ">=3.10.0.0", markers = "python_version < \"3.10\""},
-    {version = "!=3.10.0.1", markers = "python_version >= \"3.10\""},
-]
+typing-extensions = ">=3.10.0.0"
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -375,8 +372,8 @@ brotli = ["brotli"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "ca15e97c75a9ab9d641b3182081e60de010ee2be4d97386aa90586ccd21174bd"
+python-versions = "3.9.6"
+content-hash = "f9ceb6a7a272b85f3ed238162049ffddb6bf4b968215c785e33f3705309d3542"
 
 [metadata.files]
 asgiref = [
