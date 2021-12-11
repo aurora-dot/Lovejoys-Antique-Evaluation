@@ -131,3 +131,5 @@ dmypy.json
 .dccache
 
 .vscode
+
+node_modules
