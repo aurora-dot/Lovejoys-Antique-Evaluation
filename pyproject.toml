@@ -12,6 +12,7 @@ gunicorn = "^20.1.0"
 django-heroku = "^0.3.1"
 django-storages = "^1.12.3"
 psycopg2 = "^2.9.2"
+whitenoise = "^5.3.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.16.0"

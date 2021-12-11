@@ -35,7 +35,6 @@ DEBUG = ENV("DEBUG")
 SECRET_KEY = ENV("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = [ENV("SITENAME")]
 USE_HEROKU = ENV("USE_HEROKU")
-ALLOWED_HOSTS = [ENV("SITENAME")]
 
 # Application definition
 
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
