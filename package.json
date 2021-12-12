@@ -6,7 +6,8 @@
   "watch": {
     "build": {
       "patterns": [
-        "app/templates/app"
+        "app/templates/app",
+        "accounts/templates/accounts"
       ],
       "extensions": "html"
     }
@@ -14,7 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npm-watch",
-    "build": "postcss jstoolchain/css/tailwind.css -o app/static/app/css/tailwind-output.css"
+    "build": "postcss jstoolchain/css/tailwind.css -o static/css/tailwind-output.css"
   },
   "keywords": [],
   "author": "",

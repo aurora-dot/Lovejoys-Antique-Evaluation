@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "app",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ ROOT_URLCONF = "lae.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [str(BASE_DIR.joinpath("templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -96,6 +97,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "lae.wsgi.application"
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -107,6 +111,8 @@ DATABASES = {
     }
 }
 
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
