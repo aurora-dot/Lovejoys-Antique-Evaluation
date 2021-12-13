@@ -8,10 +8,15 @@
 
     <body class="flex flex-col min-h-screen">
         <nav>
+            <div class="max-w-5xl mx-auto">
+                <div class="relative flex items-center h-16">
+                    <p class="block text-2xl font-extrabold"><a href="/">Lovejoy Antique</a></p>
+                </div>
+            </div>
         </nav>
 
         <main class="flex-grow">
-            <div class="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="max-w-5xl mx-auto">
                 {% block content %}
                 {% endblock content %}
             </div>
