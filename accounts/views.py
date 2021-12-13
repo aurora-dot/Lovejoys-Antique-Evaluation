@@ -1,12 +1,12 @@
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
+from .forms import UserCreationForm
 
 # Create your views here.
 
 
 def signup(request):
-    form = CustomUserCreationForm(request.POST)
+    form = UserCreationForm(request.POST)
     if form.is_valid():
         form.save()
         username = form.cleaned_data.get("username")
