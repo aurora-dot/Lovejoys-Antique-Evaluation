@@ -5,7 +5,7 @@ from .forms import UserCreationForm
 # Create your views here.
 
 
-def signup(request):
+def signup_view(request):
     form = UserCreationForm(request.POST)
     if form.is_valid():
         form.save()
@@ -13,5 +13,5 @@ def signup(request):
         password = form.cleaned_data.get("password1")
         user = authenticate(username=username, password=password)
         login(request, user)
-        return redirect("")
+        return redirect("/")
     return render(request, "accounts/signup.html", {"form": form})
