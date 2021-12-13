@@ -2,3 +2,4 @@
 max-line-length = 88
 per-file-ignores =
     lae/settings.py:E501
+    accounts/migrations/0001_initial.py:E501

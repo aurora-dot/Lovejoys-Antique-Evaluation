@@ -62,8 +62,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "phonenumber_field",
+    "crispy_forms",
+    "crispy_tailwind",
     "app",
+    "accounts",
 ]
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -81,7 +90,7 @@ ROOT_URLCONF = "lae.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [str(BASE_DIR.joinpath("global_templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -96,6 +105,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "lae.wsgi.application"
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -107,6 +119,8 @@ DATABASES = {
     }
 }
 
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -151,6 +165,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "accounts.User"
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
