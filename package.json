@@ -7,7 +7,8 @@
     "build": {
       "patterns": [
         "app/templates/app",
-        "accounts/templates/accounts"
+        "accounts/templates/accounts",
+        "accounts/templates/registration"
       ],
       "extensions": "html"
     }
@@ -23,11 +24,9 @@
   "dependencies": {
     "autoprefixer": "^10.3.1",
     "postcss-cli": "^8.3.1",
-    "tailwindcss": "^2.2.7"
+    "tailwindcss": "3.0.0"
   },
   "devDependencies": {
-    "npm-watch": "^0.11.0",
-    "pa11y": "^6.0.1",
-    "pa11y-ci": "^2.4.2"
+    "npm-watch": "^0.11.0"
   }
 }

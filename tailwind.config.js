@@ -1,14 +1,11 @@
 module.exports = {
   mode: "jit",
-  purge: [
-    "app/templates/app/*.html",
-    "accounts/templates/accounts/*.html", 
+  content: [
+    "**/templates/**/*.html",
+    "global_templates/*.html",
+    "form_tailwind/*.html"
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
-  },
-  variants: {
     extend: {},
   },
   plugins: [],

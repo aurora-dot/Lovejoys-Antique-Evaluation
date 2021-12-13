@@ -1,9 +1,16 @@
+{% load static %}
+{% load tailwind_filters %}
+
 <html>
+    <head>
+        <link rel="stylesheet" href="{% static 'css/tailwind-output.css' %}">
+    </head>
+    
     <body>
         <h2>Sign up</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form|crispy }}
             <button type="submit">Sign up</button>
         </form>
     </body>
