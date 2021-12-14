@@ -134,5 +134,5 @@ dmypy.json
 
 node_modules
 
-static/css/tailwind-output.css
+static/css/style.css
 *.icloud
