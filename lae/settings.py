@@ -32,6 +32,10 @@ ENV = environ.Env(
     DJANGO_SECRET_KEY=(str, "R%MtBmjWn4Qrk3&$7@AxyJvkQy4hxvN%Tt!ugdrKMfm4imMFL2v"),
     SITENAME=(str, "*"),
     USE_HEROKU=(bool, False),
+    EMAIL_HOST=(str, ""),
+    EMAIL_HOST_USER=(str, ""),
+    EMAIL_HOST_PASSWORD=(str, ""),
+    DEFAULT_FROM_EMAIL=(str, ""),
 )
 
 DEBUG = ENV("DEBUG")
@@ -39,6 +43,12 @@ SECRET_KEY = ENV("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = [ENV("SITENAME")]
 USE_HEROKU = ENV("USE_HEROKU")
 
+EMAIL_HOST = ENV("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ENV("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = ENV("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = ENV("DEFAULT_FROM_EMAIL")
 
 if not DEBUG:
     sentry_sdk.init(
@@ -90,7 +100,7 @@ ROOT_URLCONF = "lae.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(BASE_DIR.joinpath("global_templates"))],
+        "DIRS": [str(BASE_DIR.joinpath("templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
