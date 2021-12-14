@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load tailwind_filters %}
+
+{% block title %}Request Evaluation{% endblock title %}
+
+{% block content %}
+    {% if not submitted %}
+        <h2 class="text-6xl font-bold pb-10">Request Evaluation.</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div>
+                <button type="submit" class="py-2 bg-white border rounded-lg px-4 border-gray-300 ">Submit</button>
+            </div>
+        </form>
+    {% else %}
+        <div class="flex h-full flex-col items-center justify-center">
+            <p class="text-5xl font-bold text-center text-green-500">Submitted request.</p>
+        </div>
+    {% endif %}
+{% endblock content %}

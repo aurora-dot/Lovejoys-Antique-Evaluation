@@ -14,7 +14,8 @@
                 <div class="flex items-center h-16">
                     <p class="text-2xl font-extrabold flex-1"><a href="/">Lovejoy Antique</a></p>
                     {% if request.user.is_authenticated %}
-                        <p class="ml-auto"><a href="{% url 'accounts:logout' %}">Logout</a></p>
+                        <p class="ml-auto px-10"><a href="{% url 'app:request_evaluation' %}">Request Evaluation</a></p>
+                        <p><a href="{% url 'accounts:logout' %}">Logout</a></p>
                     {% else %}
                         <p class="ml-auto px-10"><a href="{% url 'accounts:login' %}">Login</a></p>
                         <p><a href="{% url 'accounts:signup' %}">Sign Up</a></p>

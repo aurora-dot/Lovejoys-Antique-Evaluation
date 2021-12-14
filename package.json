@@ -9,7 +9,8 @@
         "app/templates/app",
         "accounts/templates/accounts",
         "templates/registration",
-        "templates"
+        "templates",
+        "form_tailwind"
       ],
       "extensions": "html"
     }
