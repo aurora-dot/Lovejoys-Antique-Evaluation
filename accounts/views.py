@@ -11,7 +11,10 @@ def signup_view(request):
 
     form = UserCreationForm(request.POST)
     if form.is_valid():
-        form.save()
+        user = form.save()
+        user.refresh_from_db()
+        user.profile.phone_number = form.cleaned_data.get("phone_number")
+        user.save()
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password1")
         user = authenticate(username=username, password=password)

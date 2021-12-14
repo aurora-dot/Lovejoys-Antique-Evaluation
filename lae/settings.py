@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     "app",
     "accounts",
+    "storages",
 ]
 
 

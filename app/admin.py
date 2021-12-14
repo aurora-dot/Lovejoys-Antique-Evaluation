@@ -12,7 +12,7 @@ class EvaluationRequestAdmin(admin.ModelAdmin):
         if obj.contact_method == "E":
             return obj.user.email
         else:
-            return obj.user.phone_number
+            return obj.user.profile.phone_number
 
 
 admin.site.register(EvaluationRequest, EvaluationRequestAdmin)
