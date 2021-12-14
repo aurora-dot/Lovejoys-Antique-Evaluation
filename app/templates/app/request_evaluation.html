@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load tailwind_filters %}
+
 {% block title %}Request Evaluation{% endblock title %}
 
 {% block content %}
+    <h2 class="text-6xl font-bold pb-10">Request Evaluation.</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div>
+            <button type="submit" class="py-2 bg-white border rounded-lg px-4 border-gray-300 ">Submit</button>
+        </div>
+    </form>
 {% endblock content %}
-

@@ -1,14 +1,17 @@
-from django.shortcuts import render
-
-# from django.core.mail import send_mail
+from django.shortcuts import redirect, render
+from .forms import EvaluationForm
 
 
 # Create your views here.
 def index(request):
-    # send_mail('subject', 'body of the message',
-    # 'no-reply@lovejoyantiques.xyz', ['user@example.com'])
     return render(request, "app/index.html")
 
 
 def request_evaluation(request):
-    return render(request, "app/request_evaluation.html")
+    if request.user.is_authenticated:
+        form = EvaluationForm(request.POST)
+        if form.is_valid():
+            print()
+        return render(request, "app/request_evaluation.html", {"form": form})
+    else:
+        return redirect("/")
