@@ -15,4 +15,4 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def test_django_initial_startup_html(self):
         self.browser.get(self.live_server_url)
-        self.assertEquals("Lovejoy Antique | Home", self.browser.title)
+        self.assertEquals("Home | Lovejoy Antique", self.browser.title)
