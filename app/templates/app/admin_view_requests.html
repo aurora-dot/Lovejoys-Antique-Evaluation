@@ -23,7 +23,7 @@
                         
                         <div>
                             <h4 class="font-bold text-xl">Contact</h4>
-                            <p>{% if request.contact_method == 'E' %}{{user.email}}{% else %}{{user.phone_number}}{% endif %}</p>
+                            <p>{% if request.contact_method == 'E' %}{{user.email}}{% else %}{{user.profile.phone_number}}{% endif %}</p>
                         </div>
                     </div>
                 {% endfor %}
