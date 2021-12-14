@@ -1,0 +1,35 @@
+{% load static %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'css/tailwind-output.css' %}">
+        <title>Lovejoy Antique | {% block title %}Home{% endblock %}</title>
+    </head>
+
+    <body class="flex flex-col min-h-screen">
+        <nav>
+            <div class="max-w-5xl mx-auto pb-5">
+                <div class="flex items-center h-16">
+                    <p class="text-2xl font-extrabold flex-1"><a href="/">Lovejoy Antique</a></p>
+                    {% if request.user.is_authenticated %}
+                        <p class="ml-auto"><a href="{% url 'accounts:logout' %}">Logout</a></p>
+                    {% else %}
+                        <p class="ml-auto px-10"><a href="{% url 'accounts:login' %}">Login</a></p>
+                        <p class=""><a href="{% url 'accounts:signup' %}">Sign Up</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow">
+            <div class="max-w-4xl mx-auto">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </main>
+
+        <footer class="w-full p-4 pt-6 text-center text-sm text-gray-500">
+            <p class="underline">Lovejoy Antiques©</p>
+        </footer>
+    </body>
+</html>

@@ -3,15 +3,15 @@
 
 {% load tailwind_filters %}
 
-{% block title %}Sign Up{% endblock title %}
+{% block title %}Login{% endblock title %}
 
 {% block content %}
-    <h2 class="text-6xl font-bold pb-10">Sign up</h2>
+    <h2 class="text-6xl font-bold pb-10">Login</h2>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
         <div class="mt-10">
-            <button type="submit" class="py-2 bg-white border rounded-lg px-4 border-gray-300 ">Sign Up</button>
+            <button type="submit" class="py-2 bg-white border rounded-lg px-4 border-gray-300 ">Login</button>
         </div>
     </form>
 {% endblock content %}
