@@ -14,7 +14,12 @@
                 <div class="flex items-center h-16">
                     <p class="text-2xl font-extrabold flex-1"><a href="/">Lovejoy Antique</a></p>
                     {% if request.user.is_authenticated %}
-                        <p class="ml-auto px-10"><a href="{% url 'app:request_evaluation' %}">Request Evaluation</a></p>
+                        {% if request.user.is_staff or request.user.is_superuser %}
+                            <p class="ml-auto px-10"><a href="{% url 'app:admin_view_requests' %}">View Requests</a></p>
+                            <p class="pr-10"><a href="{% url 'app:request_evaluation' %}">Request Evaluation</a></p>
+                        {% else %}
+                            <p class="ml-auto px-10"><a href="{% url 'app:request_evaluation' %}">Request Evaluation</a></p>
+                        {% endif %}
                         <p><a href="{% url 'accounts:logout' %}">Logout</a></p>
                     {% else %}
                         <p class="ml-auto px-10"><a href="{% url 'accounts:login' %}">Login</a></p>

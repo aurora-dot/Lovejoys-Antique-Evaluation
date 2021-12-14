@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import redirect, render
 from .forms import EvaluationForm
 from accounts.models import User
@@ -24,3 +25,17 @@ def request_evaluation(request):
         )
     else:
         return redirect("/")
+
+
+def admin_view_requests(request):
+    if (
+        request.user.is_authenticated
+        and request.user.is_staff
+        or request.user.is_superuser
+    ):
+        user_requests = User.objects.prefetch_related("evaluation_requests").all()
+        return render(
+            request, "app/admin_view_requests.html", {"user_requests": user_requests}
+        )
+    else:
+        raise Http404
