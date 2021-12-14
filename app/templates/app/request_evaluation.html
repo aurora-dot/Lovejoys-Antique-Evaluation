@@ -8,7 +8,7 @@
 {% block content %}
     {% if not submitted %}
         <h2 class="text-6xl font-bold pb-10">Request Evaluation.</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
             <div>
