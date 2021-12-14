@@ -14,5 +14,5 @@ class EvaluationRequest(models.Model):
     user = models.ForeignKey(
         User, related_name="evaluation_requests", on_delete=models.CASCADE
     )
-    comment = models.TextField()
+    item_description = models.TextField()
     contact_method = models.CharField(max_length=1, choices=CONTACT_METHODS)

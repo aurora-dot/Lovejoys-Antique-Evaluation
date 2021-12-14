@@ -2,7 +2,7 @@ from django import forms
 from .models import EvaluationRequest
 
 
-class EvaluationForm(forms.Form):
+class EvaluationForm(forms.ModelForm):
     class Meta:
         model = EvaluationRequest
-        fields = ("comment", "contact_method")
+        fields = ("item_description", "contact_method")

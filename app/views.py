@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from .forms import EvaluationForm
+from accounts.models import User
 
 
 # Create your views here.
@@ -9,9 +10,17 @@ def index(request):
 
 def request_evaluation(request):
     if request.user.is_authenticated:
+        submitted = False
         form = EvaluationForm(request.POST)
         if form.is_valid():
-            print()
-        return render(request, "app/request_evaluation.html", {"form": form})
+            obj = form.save(commit=False)
+            obj.user = User.objects.get(pk=request.user.id)
+            obj.save()
+            submitted = True
+        return render(
+            request,
+            "app/request_evaluation.html",
+            {"form": form, "submitted": submitted},
+        )
     else:
         return redirect("/")

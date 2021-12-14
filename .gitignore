@@ -136,3 +136,5 @@ node_modules
 
 static/css/style.css
 *.icloud
+
+.DS_Store
