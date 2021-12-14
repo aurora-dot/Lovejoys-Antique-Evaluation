@@ -1,9 +1,10 @@
 module.exports = {
   mode: "jit",
   content: [
-    "**/templates/**/*.html",
-    "global_templates/*.html",
-    "form_tailwind/*.html"
+    "app/templates/app/*.html",
+    "accounts/templates/accounts/*.html",
+    "templates/registration/*.html",
+    "templates/*.html"
   ],
   theme: {
     extend: {},

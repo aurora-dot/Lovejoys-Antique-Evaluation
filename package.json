@@ -8,7 +8,8 @@
       "patterns": [
         "app/templates/app",
         "accounts/templates/accounts",
-        "accounts/templates/registration"
+        "templates/registration",
+        "templates"
       ],
       "extensions": "html"
     }
