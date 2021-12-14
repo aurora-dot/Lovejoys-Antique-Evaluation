@@ -35,6 +35,7 @@ ENV = environ.Env(
     EMAIL_HOST=(str, ""),
     EMAIL_HOST_USER=(str, ""),
     EMAIL_HOST_PASSWORD=(str, ""),
+    DEFAULT_FROM_EMAIL=(str, ""),
 )
 
 DEBUG = ENV("DEBUG")
@@ -47,6 +48,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = ENV("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = ENV("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = ENV("DEFAULT_FROM_EMAIL")
 
 if not DEBUG:
     sentry_sdk.init(
