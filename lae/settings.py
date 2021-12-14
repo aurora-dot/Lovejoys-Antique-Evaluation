@@ -32,6 +32,9 @@ ENV = environ.Env(
     DJANGO_SECRET_KEY=(str, "R%MtBmjWn4Qrk3&$7@AxyJvkQy4hxvN%Tt!ugdrKMfm4imMFL2v"),
     SITENAME=(str, "*"),
     USE_HEROKU=(bool, False),
+    EMAIL_HOST=(str, ""),
+    EMAIL_HOST_USER=(str, ""),
+    EMAIL_HOST_PASSWORD=(str, ""),
 )
 
 DEBUG = ENV("DEBUG")
@@ -39,6 +42,11 @@ SECRET_KEY = ENV("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = [ENV("SITENAME")]
 USE_HEROKU = ENV("USE_HEROKU")
 
+EMAIL_HOST = ENV("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ENV("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = ENV("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
 
 if not DEBUG:
     sentry_sdk.init(
