@@ -123,6 +123,7 @@ STATICFILES_DIRS = [
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -192,6 +193,12 @@ if not DEBUG:
 
 # Heroku settings
 
-if USE_HEROKU:
+if USE_HEROKU and not DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": "lovejoy-antiques",
+        }
+    }
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
     django_heroku.settings(locals())
