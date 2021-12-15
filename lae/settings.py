@@ -29,7 +29,10 @@ environ.Env.read_env(str(BASE_DIR) + "/.env")
 ENV = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    DJANGO_SECRET_KEY=(str, "R%MtBmjWn4Qrk3&$7@AxyJvkQy4hxvN%Tt!ugdrKMfm4imMFL2v"),
+    DJANGO_SECRET_KEY=(
+        str,
+        "DQZLA!5wn3uwQHXGH%U4wi2%dmJhwmvh2ko#mMRTa3VK7TibMypi#DZ5x^UEK&oxQ#t4xRun",
+    ),
     SITENAME=(str, "*"),
     USE_HEROKU=(bool, False),
     EMAIL_HOST=(str, ""),
@@ -80,11 +83,6 @@ INSTALLED_APPS = [
     "storages",
 ]
 
-
-CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
-
-CRISPY_TEMPLATE_PACK = "tailwind"
-
 MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -120,6 +118,11 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# Crispy forms theme
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -129,6 +132,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# Redirect urls after logging in or out
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
@@ -166,7 +171,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files and media files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
@@ -180,9 +185,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Auth user model for authorisation app
+
 AUTH_USER_MODEL = "accounts.User"
 
-if not DEBUG:
+
+# Security settings
+
+if not DEBUG and USE_HEROKU:
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 60
     SESSION_COOKIE_SECURE = True
@@ -193,5 +203,18 @@ if not DEBUG:
 # Heroku settings
 
 if USE_HEROKU:
+    HEROKU_ENV = environ.Env(
+        AWS_STORAGE_BUCKET_NAME=(str, ""),
+        AWS_ACCESS_KEY_ID=(str, ""),
+        AWS_SECRET_ACCESS_KEY=(str, ""),
+    )
+
+    AWS_STORAGE_BUCKET_NAME = HEROKU_ENV("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = "eu-west-2"
+    AWS_ACCESS_KEY_ID = HEROKU_ENV("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = HEROKU_ENV("AWS_SECRET_ACCESS_KEY")
+
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
     django_heroku.settings(locals())
