@@ -92,6 +92,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "csp.middleware.CSPMiddleware",
 ]
 
 ROOT_URLCONF = "lae.urls"
@@ -193,6 +194,12 @@ AUTH_USER_MODEL = "accounts.User"
 # Security settings
 
 if not DEBUG:
+    CSP_DEFAULT_SRC = "'none'"
+    CSP_STYLE_SRC = "'self'"
+    CSP_SCRIPT_SRC = "'self'"
+    CSP_FONT_SRC = "'self'"
+    CSP_IMG_SRC = ("'self'", "lovejoy-antique-media.s3.amazonaws.com")
+
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 60
     SESSION_COOKIE_SECURE = True
