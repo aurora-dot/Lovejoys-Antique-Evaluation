@@ -192,7 +192,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 # Security settings
 
-if not DEBUG and USE_HEROKU:
+if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 60
     SESSION_COOKIE_SECURE = True
