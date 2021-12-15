@@ -1,27 +1,34 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-
-# from .forms import UserCreationForm
-from .models import User, Profile
+from django.utils.translation import ugettext_lazy as _
+from .models import User
 
 # Register your models here.
 
 
 class UserAdmin(UserAdmin):
     model = User
-    list_display = ["email", "username", "first_name", "last_name", "phone_number"]
-
-    def phone_number(self, obj):
-        return obj.profile.phone_number
-
-
-class ProfileAdmin(admin.ModelAdmin):
-    model = Profile
-    list_display = ["username", "phone_number"]
-
-    def username(self, obj):
-        return obj.user.username
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (
+            _("Personal info"),
+            {"fields": ("first_name", "last_name", "email", "phone_number")},
+        ),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    list_display = ["username", "first_name", "last_name", "email", "phone_number"]
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Profile, ProfileAdmin)
