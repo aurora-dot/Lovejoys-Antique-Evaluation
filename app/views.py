@@ -22,7 +22,7 @@ def request_evaluation(request):
             obj.save()
             submitted = True
     else:
-        form = EvaluationForm
+        form = EvaluationForm()
 
     return render(
         request,

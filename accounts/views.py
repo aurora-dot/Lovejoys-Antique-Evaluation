@@ -1,13 +1,17 @@
 from django.conf import settings
-from django.shortcuts import render, redirect
-from .forms import UserCreationForm
 from django.core.mail import send_mail
-from .tokens import account_activation_token
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
-from django.contrib.auth import get_user_model
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.shortcuts import render, redirect
+
+from .models import User
+from .tokens import account_activation_token
+from .forms import UserCreationForm, OTPForm
+
 
 # Create your views here.
 
@@ -16,14 +20,13 @@ def signup_view(request):
     if request.user.is_authenticated:
         return redirect("/")
 
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
+    form = UserCreationForm(request.POST or None)
 
+    if request.method == "POST":
+        if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
             email = user.email
-            user.save()
 
             mail_subject = "Activate your account."
             message = render_to_string(
@@ -36,9 +39,10 @@ def signup_view(request):
                 },
             )
             send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+
+            user.save()
+
             return render(request, "accounts/success_signup.html")
-    else:
-        form = UserCreationForm()
 
     return render(request, "accounts/signup.html", {"form": form})
 
@@ -47,22 +51,58 @@ def validate_email(request, uidb64, token):
     return_title = "Invalid."
     return_text = "The activation link is invalid."
 
-    User = get_user_model()
-
     try:
         user = User.objects.get(pk=urlsafe_base64_decode(uidb64))
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
-    if user is not None and account_activation_token.check_token(user, token):
-        if not user.is_active:
-            user.is_active = True
-            user.save()
-            return_title = "Success"
-            return_text = (
-                "Thank you for your email confirmation. Now you can login your account."
-            )
+    if (
+        user is not None
+        and account_activation_token.check_token(user, token)
+        and not user.is_active
+    ):
+        user.is_active = True
+        user.save()
+        return_title = "Success"
+        return_text = (
+            "Thank you for your email confirmation. Now you can login your account."
+        )
 
     return render(
         request, "accounts/validate.html", {"title": return_title, "text": return_text}
     )
+
+
+def login_view(request):
+    form = AuthenticationForm()
+    if request.method == "POST":
+        username, password = request.POST.get("username"), request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            request.session["pk"] = user.pk
+            return redirect("verify/")
+    return render(request, "accounts/login.html", {"form": form})
+
+
+def verify_view(request):
+    form = OTPForm(request.POST or None)
+    pk = request.session.get("pk")
+    if pk:
+        user = User.objects.get(pk=pk)
+        otp = user.otp
+        pin = otp.pin
+
+        if not request.POST:
+            mail_subject = "Lovejoy Antiques: OTP"
+            message = render_to_string("accounts/otp_email.html", {"pin": pin})
+            send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+        if form.is_valid():
+            pin_input = form.cleaned_data.get("pin")
+            if pin_input == pin:
+                otp.save()
+                login(request, user)
+                redirect("app.index")
+
+    return render(request, "accounts/otp.html", {"form": form})
