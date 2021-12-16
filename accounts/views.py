@@ -1,17 +1,17 @@
 from django.conf import settings
-from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.http import Http404
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.shortcuts import render, redirect
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+from .forms import OTPForm, UserCreationForm
 from .models import User
 from .tokens import account_activation_token
-from .forms import UserCreationForm, OTPForm
-
 
 # Create your views here.
 
@@ -74,35 +74,56 @@ def validate_email(request, uidb64, token):
 
 
 def login_view(request):
-    form = AuthenticationForm()
-    if request.method == "POST":
-        username, password = request.POST.get("username"), request.POST.get("password")
+    if not request.session.test_cookie_worked():
+        return render(request, "accounts/cookie_error.html")
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            request.session["pk"] = user.pk
-            return redirect("verify/")
-    return render(request, "accounts/login.html", {"form": form})
+    request.session.delete_test_cookie()
+    if not request.user.is_authenticated:
+        form = AuthenticationForm()
+        if request.method == "POST":
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                request.session["pk"] = user.pk
+                return redirect("verify/")
+        return render(request, "accounts/login.html", {"form": form})
+    else:
+        return redirect("app:index")
 
 
 def verify_view(request):
-    form = OTPForm(request.POST or None)
-    pk = request.session.get("pk")
-    if pk:
-        user = User.objects.get(pk=pk)
-        otp = user.otp
-        pin = otp.pin
+    if request.session.get("pk") and not request.user.is_authenticated:
+        form = OTPForm(request.POST or None)
+        pk = request.session.get("pk")
 
-        if not request.POST:
-            mail_subject = "Lovejoy Antiques: OTP"
-            message = render_to_string("accounts/otp_email.html", {"pin": pin})
-            send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+        if pk:
+            try:
+                user = User.objects.get(pk=pk)
+            except User.DoesNotExist:
+                return Http404
 
-        if form.is_valid():
-            pin_input = form.cleaned_data.get("pin")
-            if pin_input == pin:
-                otp.save()
-                login(request, user)
-                redirect("app.index")
+            otp = user.otp
+            pin = otp.pin
 
-    return render(request, "accounts/otp.html", {"form": form})
+            if not request.POST:
+                mail_subject = "Lovejoy Antiques: OTP"
+                message = render_to_string("accounts/otp_email.html", {"pin": pin})
+                send_mail(
+                    mail_subject, message, settings.DEFAULT_FROM_EMAIL, [user.email]
+                )
+
+            if form.is_valid():
+                pin_input = form.cleaned_data.get("pin")
+                if pin_input == pin:
+                    otp.save()
+                    login(request, user)
+                    redirect("app:index")
+
+        return render(request, "accounts/otp.html", {"form": form})
+    else:
+        if request.user.is_authenticated:
+            return redirect("app:index")
+        else:
+            return redirect("accounts:login")

@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
+from pathlib import Path
+
 import django_heroku
 import environ
-from pathlib import Path
-import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 

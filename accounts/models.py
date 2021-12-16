@@ -1,10 +1,11 @@
 from random import randint
-from django.db import models
+
 from django.contrib.auth.models import AbstractUser
-from phonenumber_field.modelfields import PhoneNumberField
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.dispatch import receiver  # add this
-from django.db.models.signals import post_save  # add this
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 

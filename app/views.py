@@ -1,8 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render
-from .forms import EvaluationForm
+
 from accounts.models import User
-from django.contrib.auth.decorators import login_required
+
+from .forms import EvaluationForm
 
 
 # Create your views here.

@@ -1,6 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm
-from .models import User, OTP
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
+from .models import OTP, User
 
 
 class UserCreationForm(UserCreationForm):
