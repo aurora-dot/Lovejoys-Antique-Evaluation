@@ -74,10 +74,6 @@ def validate_email(request, uidb64, token):
 
 
 def login_view(request):
-    if not request.session.test_cookie_worked():
-        return render(request, "accounts/cookie_error.html")
-
-    request.session.delete_test_cookie()
     if not request.user.is_authenticated:
         form = AuthenticationForm()
         if request.method == "POST":
@@ -88,6 +84,7 @@ def login_view(request):
             if user is not None:
                 request.session["pk"] = user.pk
                 return redirect("verify/")
+
         return render(request, "accounts/login.html", {"form": form})
     else:
         return redirect("app:index")

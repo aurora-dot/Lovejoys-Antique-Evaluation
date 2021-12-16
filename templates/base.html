@@ -12,7 +12,7 @@
         <nav>
             <div class="max-w-5xl mx-auto">
                 <div class="flex items-center h-16">
-                    <p class="text-2xl font-extrabold flex-1"><a href="/">Lovejoy Antique</a></p>
+                    <p class="font-extrabold flex-1"><a href="/">Lovejoy Antique</a></p>
                     {% if request.user.is_authenticated %}
                         {% if request.user.is_staff or request.user.is_superuser %}
                             <p class="ml-auto px-10"><a href="{% url 'app:admin_view_requests' %}">View Requests</a></p>

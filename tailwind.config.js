@@ -5,7 +5,7 @@ module.exports = {
     "accounts/templates/accounts/*.html",
     "templates/registration/*.html",
     "templates/*.html",
-    "form_tailwind/*.html"
+    "tailwind/misc/*.html"
   ],
   theme: {
     extend: {},

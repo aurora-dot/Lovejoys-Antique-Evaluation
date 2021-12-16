@@ -1,5 +1,5 @@
 {
-  "name": "jstoolchain",
+  "name": "tailwind-gen",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,15 +10,15 @@
         "accounts/templates/accounts",
         "templates/registration",
         "templates",
-        "form_tailwind"
+        "tailwind/misc"
       ],
       "extensions": "html"
     }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "npm-watch",
-    "build": "postcss jstoolchain/css/tailwind.css -o static/css/style.css"
+    "watch": "tailwindcss -i ./tailwind/style.css -o ./static/css/style.css --watch",
+    "build": "tailwindcss -i ./tailwind/style.css -o ./static/css/style.css"
   },
   "keywords": [],
   "author": "",
