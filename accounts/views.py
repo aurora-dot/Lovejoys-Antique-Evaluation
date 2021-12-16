@@ -27,6 +27,7 @@ def signup_view(request):
             user = form.save(commit=False)
             user.is_active = False
             email = user.email
+            user.save()
 
             mail_subject = "Activate your account."
             message = render_to_string(
@@ -36,11 +37,10 @@ def signup_view(request):
                     "domain": get_current_site(request).domain,
                     "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                     "token": account_activation_token.make_token(user),
+                    "protocol": "https" if request.is_secure() else "http",
                 },
             )
             send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [email])
-
-            user.save()
 
             return render(request, "accounts/success_signup.html")
 
@@ -52,6 +52,7 @@ def validate_email(request, uidb64, token):
     return_text = "The activation link is invalid."
 
     try:
+        print(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=urlsafe_base64_decode(uidb64))
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
@@ -61,6 +62,9 @@ def validate_email(request, uidb64, token):
         and account_activation_token.check_token(user, token)
         and not user.is_active
     ):
+        test = account_activation_token.make_token(user)
+        print(test)
+        print(token)
         user.is_active = True
         user.save()
         return_title = "Success"
@@ -116,7 +120,7 @@ def verify_view(request):
                 if pin_input == pin:
                     otp.save()
                     login(request, user)
-                    redirect("app:index")
+                    return redirect("app:index")
 
         return render(request, "accounts/otp.html", {"form": form})
     else:
