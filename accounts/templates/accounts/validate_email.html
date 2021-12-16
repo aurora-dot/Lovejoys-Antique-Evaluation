@@ -1,0 +1,6 @@
+{% autoescape off %}
+You have created an account, to activate please visit:
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'accounts:validate_confirm' uidb64=uid token=token %}
+{% endblock %}
+{% endautoescape %}

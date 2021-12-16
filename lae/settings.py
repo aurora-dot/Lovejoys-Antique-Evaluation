@@ -155,6 +155,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+    {"NAME": "lae.password_validators.SymbolValidator"},
+    {"NAME": "lae.password_validators.MixedCaseValidator"},
 ]
 
 
@@ -209,11 +211,14 @@ if not DEBUG:
     CSP_IMG_SRC = ("'self'", "lovejoy-antique-media.s3.amazonaws.com")
 
     SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 60
     SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    CSRF_COOKIE_SECURE = True
 
 # Heroku settings
 
