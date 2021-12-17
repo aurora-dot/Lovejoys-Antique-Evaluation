@@ -1,3 +1,4 @@
+import requests
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -80,7 +81,25 @@ def validate_email(request, uidb64, token):
 def login_view(request):
     if not request.user.is_authenticated:
         form = AuthenticationForm()
+
+        if settings.USE_HEROKU:
+            data = {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
+        else:
+            data = {"form": form}
+
         if request.method == "POST":
+
+            if settings.USE_HEROKU:
+                captcha_response = request.POST.get("h-captcha-response")
+                data = {
+                    "secret": settings.HCAPTCHA_SECRET_KEY,
+                    "response": captcha_response,
+                }
+                r = requests.post(settings.HCAPTCHA_VERIFY_URL, data=data)
+                result = r.json()
+                if not result["success"]:
+                    return render(request, "accounts/login.html", data)
+
             username = request.POST.get("username")
             password = request.POST.get("password")
 
@@ -88,11 +107,6 @@ def login_view(request):
             if user is not None:
                 request.session["pk"] = user.pk
                 return redirect("verify/")
-
-        if settings.HEROKU_ENV:
-            data = {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
-        else:
-            data = {"form": form}
 
         return render(request, "accounts/login.html", data)
     else:
