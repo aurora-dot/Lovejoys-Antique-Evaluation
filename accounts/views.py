@@ -24,10 +24,15 @@ def signup_view(request):
         return redirect("/")
 
     form = UserCreationForm(request.POST or None)
+    if settings.USE_HEROKU:
+        data = {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
+    else:
+        data = {"form": form}
 
     if request.method == "POST":
         if form.is_valid():
-            check_hcaptcha(request, "accounts:signup")
+            if not check_hcaptcha(request):
+                return redirect("accounts:signup")
             user = form.save(commit=False)
             user.is_active = False
             email = user.email
@@ -48,7 +53,7 @@ def signup_view(request):
 
             return render(request, "accounts/success_signup.html")
 
-    return render(request, "accounts/signup.html", {"form": form})
+    return render(request, "accounts/signup.html", data)
 
 
 def validate_email(request, uidb64, token):
@@ -88,7 +93,8 @@ def login_view(request):
             data = {"form": form}
 
         if request.method == "POST":
-            check_hcaptcha(request, "accounts:login")
+            if not check_hcaptcha(request):
+                return redirect("accounts:login")
             username = request.POST.get("username")
             password = request.POST.get("password")
 
@@ -137,7 +143,7 @@ def verify_view(request):
             return redirect("accounts:login")
 
 
-def check_hcaptcha(request, redirect_to):
+def check_hcaptcha(request):
     if settings.USE_HEROKU:
         captcha_response = request.POST.get("h-captcha-response")
         data = {
@@ -146,5 +152,6 @@ def check_hcaptcha(request, redirect_to):
         }
         r = requests.post(settings.HCAPTCHA_VERIFY_URL, data=data)
         result = r.json()
-        if not result["success"]:
-            return redirect(redirect_to)
+        return result["success"]
+    else:
+        return True
