@@ -91,7 +91,6 @@ def login_view(request):
 
         if settings.HEROKU_ENV:
             data = {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
-            raise Exception(data)
         else:
             data = {"form": form}
 
