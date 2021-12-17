@@ -223,17 +223,25 @@ if not DEBUG:
 
 # Heroku settings
 
+HEROKU_ENV = None
 if USE_HEROKU:
     HEROKU_ENV = environ.Env(
         AWS_STORAGE_BUCKET_NAME=(str, ""),
         AWS_ACCESS_KEY_ID=(str, ""),
         AWS_SECRET_ACCESS_KEY=(str, ""),
+        HCAPTCHA_TOKEN=(str, ""),
+        HCAPTCHA_SECRET_KEY=(str, ""),
+        HCAPTCHA_VERIFY_URL=(str, ""),
     )
 
     AWS_STORAGE_BUCKET_NAME = HEROKU_ENV("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_REGION_NAME = "eu-west-2"
     AWS_ACCESS_KEY_ID = HEROKU_ENV("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = HEROKU_ENV("AWS_SECRET_ACCESS_KEY")
+
+    HCAPTCHA_TOKEN = HEROKU_ENV("HCAPTCHA_TOKEN")
+    HCAPTCHA_SECRET_KEY = HEROKU_ENV("HCAPTCHA_SECRET_KEY")
+    HCAPTCHA_VERIFY_URL = HEROKU_ENV("HCAPTCHA_VERIFY_URL")
 
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
