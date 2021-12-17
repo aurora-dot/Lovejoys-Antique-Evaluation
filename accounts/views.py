@@ -9,7 +9,6 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from ratelimit.decorators import ratelimit
 
 from .forms import OTPForm, UserCreationForm
 from .models import User
@@ -18,7 +17,6 @@ from .tokens import account_activation_token
 # Create your views here.
 
 
-@ratelimit(key="ip", rate="50/h")
 def signup_view(request):
     if request.user.is_authenticated:
         return redirect("/")
@@ -82,7 +80,6 @@ def validate_email(request, uidb64, token):
     )
 
 
-@ratelimit(key="ip", rate="50/h")
 def login_view(request):
     if not request.user.is_authenticated:
         form = AuthenticationForm()

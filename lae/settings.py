@@ -222,7 +222,6 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
-RATELIMIT_ENABLE = False
 if not DEBUG:
     CSP_DEFAULT_SRC = "'none'"
     CSP_FONT_SRC = "'self'"
@@ -240,7 +239,6 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     CSRF_COOKIE_SECURE = True
-    RATELIMIT_ENABLE = True
 
 # Heroku settings
 
