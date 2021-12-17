@@ -31,7 +31,8 @@ def signup_view(request):
 
     if request.method == "POST":
         if form.is_valid():
-            check_hcaptcha(request, "accounts:signup")
+            if not check_hcaptcha(request):
+                return redirect("accounts:signup")
             user = form.save(commit=False)
             user.is_active = False
             email = user.email
@@ -92,7 +93,8 @@ def login_view(request):
             data = {"form": form}
 
         if request.method == "POST":
-            check_hcaptcha(request, "accounts:login")
+            if not check_hcaptcha(request):
+                return redirect("accounts:login")
             username = request.POST.get("username")
             password = request.POST.get("password")
 
@@ -150,6 +152,6 @@ def check_hcaptcha(request, redirect_to):
         }
         r = requests.post(settings.HCAPTCHA_VERIFY_URL, data=data)
         result = r.json()
-        raise Exception(result)
-        if not result["success"]:
-            return redirect(redirect_to)
+        return result["success"]
+    else:
+        return True
