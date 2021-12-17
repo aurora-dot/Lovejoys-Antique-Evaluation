@@ -17,22 +17,5 @@
     {
       "plan": "heroku-postgresql:hobby-dev"
     }
-  ],
-  "env": {
-    "DJANGO_SUPERUSER_USERNAME": {
-      "required": true
-    },
-    "DJANGO_SUPERUSER_EMAIL": {
-      "required": true
-    },
-    "DJANGO_SUPERUSER_PASSWORD": {
-      "required": true
-    },
-    "DJANGO_SECRET_KEY": {
-      "required": true
-    },
-    "USE_HEROKU": {
-      "required": true
-    }
-  }
+  ]
 }
