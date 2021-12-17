@@ -25,6 +25,7 @@ def signup_view(request):
 
     if request.method == "POST":
         if form.is_valid():
+            check_hcaptcha(request, "accounts:signup")
             user = form.save(commit=False)
             user.is_active = False
             email = user.email
@@ -53,7 +54,6 @@ def validate_email(request, uidb64, token):
     return_text = "The activation link is invalid."
 
     try:
-        print(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=urlsafe_base64_decode(uidb64))
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
@@ -63,9 +63,6 @@ def validate_email(request, uidb64, token):
         and account_activation_token.check_token(user, token)
         and not user.is_active
     ):
-        test = account_activation_token.make_token(user)
-        print(test)
-        print(token)
         user.is_active = True
         user.save()
         return_title = "Success"
@@ -88,18 +85,7 @@ def login_view(request):
             data = {"form": form}
 
         if request.method == "POST":
-
-            if settings.USE_HEROKU:
-                captcha_response = request.POST.get("h-captcha-response")
-                data = {
-                    "secret": settings.HCAPTCHA_SECRET_KEY,
-                    "response": captcha_response,
-                }
-                r = requests.post(settings.HCAPTCHA_VERIFY_URL, data=data)
-                result = r.json()
-                if not result["success"]:
-                    return render(request, "accounts/login.html", data)
-
+            check_hcaptcha(request, "accounts:login")
             username = request.POST.get("username")
             password = request.POST.get("password")
 
@@ -124,8 +110,7 @@ def verify_view(request):
             except User.DoesNotExist:
                 return Http404
 
-            otp = user.otp
-            pin = otp.pin
+            otp, pin = user.otp, user.otp.pin
 
             if not request.POST:
                 mail_subject = "Lovejoy Antiques: OTP"
@@ -147,3 +132,16 @@ def verify_view(request):
             return redirect("app:index")
         else:
             return redirect("accounts:login")
+
+
+def check_hcaptcha(request, redirect_to):
+    if settings.USE_HEROKU:
+        captcha_response = request.POST.get("h-captcha-response")
+        data = {
+            "secret": settings.HCAPTCHA_SECRET_KEY,
+            "response": captcha_response,
+        }
+        r = requests.post(settings.HCAPTCHA_VERIFY_URL, data=data)
+        result = r.json()
+        if not result["success"]:
+            return redirect(redirect_to)
