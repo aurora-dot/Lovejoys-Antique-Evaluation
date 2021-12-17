@@ -24,6 +24,10 @@ def signup_view(request):
         return redirect("/")
 
     form = UserCreationForm(request.POST or None)
+    if settings.USE_HEROKU:
+        data = {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
+    else:
+        data = {"form": form}
 
     if request.method == "POST":
         if form.is_valid():
@@ -48,7 +52,7 @@ def signup_view(request):
 
             return render(request, "accounts/success_signup.html")
 
-    return render(request, "accounts/signup.html", {"form": form})
+    return render(request, "accounts/signup.html", data)
 
 
 def validate_email(request, uidb64, token):
