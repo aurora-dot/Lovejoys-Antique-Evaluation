@@ -89,11 +89,12 @@ def login_view(request):
                 request.session["pk"] = user.pk
                 return redirect("verify/")
 
-        data = (
-            {"form": form}
-            if settings.HEROKU_ENV is None
-            else {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
-        )
+        if settings.HEROKU_ENV:
+            data = {"form": form, "site_key": settings.HCAPTCHA_TOKEN}
+            raise Exception(data)
+        else:
+            data = {"form": form}
+
         return render(request, "accounts/login.html", data)
     else:
         return redirect("app:index")
