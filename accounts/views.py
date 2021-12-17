@@ -143,7 +143,7 @@ def verify_view(request):
             return redirect("accounts:login")
 
 
-def check_hcaptcha(request, redirect_to):
+def check_hcaptcha(request):
     if settings.USE_HEROKU:
         captcha_response = request.POST.get("h-captcha-response")
         data = {
