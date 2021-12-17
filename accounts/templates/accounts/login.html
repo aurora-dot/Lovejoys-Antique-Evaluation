@@ -3,6 +3,10 @@
 
 {% load tailwind_filters %}
 
+{% if site_key %}
+    {% block scripts %}<script src="https://js.hcaptcha.com/1/api.js" async defer></script>{% endblock scripts %}
+{% endif %}
+
 {% block title %}Login{% endblock title %}
 
 {% block content %}
@@ -11,6 +15,9 @@
         {% csrf_token %}
         {{ form|crispy }}
         <p class="mb-3 underline"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+        {% if site_key %}
+            <div class="h-captcha mb-3" data-sitekey="{{ site_key }}"></div>
+        {% endif %}
         <div>
             <button type="submit" class="py-2 bg-white border rounded-lg px-4 border-gray-300 ">Login</button>
         </div>

@@ -1,8 +1,9 @@
-from django.db import models
-from accounts.models import User
-from django.utils.translation import gettext_lazy as _
-from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxLengthValidator
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from accounts.models import User
 
 # Create your models here.
 

@@ -1,0 +1,4 @@
+{% autoescape off %}
+You have created an account, to activate please visit:
+{{ protocol }}://{{ domain }}{% url 'accounts:verify_email' uidb64=uid token=token %}
+{% endautoescape %}

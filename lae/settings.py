@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
+from pathlib import Path
+
 import django_heroku
 import environ
-from pathlib import Path
-import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -41,6 +42,15 @@ ENV = environ.Env(
     DEFAULT_FROM_EMAIL=(str, ""),
 )
 
+HEROKU_ENV = environ.Env(
+    AWS_STORAGE_BUCKET_NAME=(str, ""),
+    AWS_ACCESS_KEY_ID=(str, ""),
+    AWS_SECRET_ACCESS_KEY=(str, ""),
+    HCAPTCHA_TOKEN=(str, ""),
+    HCAPTCHA_SECRET_KEY=(str, ""),
+    HCAPTCHA_VERIFY_URL=(str, ""),
+)
+
 DEBUG = ENV("DEBUG")
 SECRET_KEY = ENV("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = [ENV("SITENAME")]
@@ -52,6 +62,15 @@ EMAIL_HOST_USER = ENV("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = ENV("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = ENV("DEFAULT_FROM_EMAIL")
+
+AWS_STORAGE_BUCKET_NAME = HEROKU_ENV("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = "eu-west-2"
+AWS_ACCESS_KEY_ID = HEROKU_ENV("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = HEROKU_ENV("AWS_SECRET_ACCESS_KEY")
+
+HCAPTCHA_TOKEN = HEROKU_ENV("HCAPTCHA_TOKEN")
+HCAPTCHA_SECRET_KEY = HEROKU_ENV("HCAPTCHA_SECRET_KEY")
+HCAPTCHA_VERIFY_URL = HEROKU_ENV("HCAPTCHA_VERIFY_URL")
 
 if not DEBUG:
     sentry_sdk.init(
@@ -155,6 +174,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+    {"NAME": "lae.password_validators.SymbolValidator"},
+    {"NAME": "lae.password_validators.MixedCaseValidator"},
 ]
 
 
@@ -201,34 +222,29 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
+RATELIMIT_ENABLE = False
 if not DEBUG:
     CSP_DEFAULT_SRC = "'none'"
-    CSP_STYLE_SRC = "'self'"
-    CSP_SCRIPT_SRC = "'self'"
     CSP_FONT_SRC = "'self'"
-    CSP_IMG_SRC = ("'self'", "lovejoy-antique-media.s3.amazonaws.com")
+    CSP_STYLE_SRC = ("'self'", "https://*.hcaptcha.com", "https://hcaptcha.com")
+    CSP_SCRIPT_SRC = ("'self'", "https://*.hcaptcha.com", "https://hcaptcha.com")
+    CSP_IMG_SRC = ("'self'", "https://lovejoy-antique-media.s3.amazonaws.com")
+    CSP_CONNECT_SRC = ("'self'", "https://*.hcaptcha.com", "https://hcaptcha.com")
+    CSP_FRAME_SRC = ("'self'", "https://*.hcaptcha.com", "https://hcaptcha.com")
 
     SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 60
     SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    CSRF_COOKIE_SECURE = True
+    RATELIMIT_ENABLE = True
 
 # Heroku settings
 
 if USE_HEROKU:
-    HEROKU_ENV = environ.Env(
-        AWS_STORAGE_BUCKET_NAME=(str, ""),
-        AWS_ACCESS_KEY_ID=(str, ""),
-        AWS_SECRET_ACCESS_KEY=(str, ""),
-    )
-
-    AWS_STORAGE_BUCKET_NAME = HEROKU_ENV("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = "eu-west-2"
-    AWS_ACCESS_KEY_ID = HEROKU_ENV("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = HEROKU_ENV("AWS_SECRET_ACCESS_KEY")
-
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
