@@ -37,8 +37,9 @@ jobs:
         uses: nanasess/setup-chromedriver@v1.0.5
       - name: Tailwind compile
         run: |
-          npm i
-          npm run build
+          cd tailwindcss
+          npm i && npm run build
+          cd -
       - name: Running static file collection
         run: |
           poetry run python manage.py collectstatic --no-input
@@ -47,11 +48,11 @@ jobs:
           poetry run python manage.py migrate --no-input
       - name: Test using django
         run: |
-          cp dev.env .env
           poetry run python manage.py test
-          rm .env
+        env:
+          DEBUG: True
       - name: Django Security Check
         run: |
-          cp prod.env .env
           poetry run python manage.py check --deploy --fail-level WARNING
-          rm .env
+        env:
+          DEBUG: False

@@ -24,8 +24,6 @@
     - `.pre-commit-config.yaml`
 - GitHub Actions
     - `.github/`
-    - `dev.env`
-    - `prod.env`
 - CSS generation files and folders:
     - `package.json`
     - `package-lock.json`
