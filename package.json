@@ -1,34 +1,11 @@
 {
-  "name": "tailwind-gen",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "watch": {
-    "build": {
-      "patterns": [
-        "app/templates/app",
-        "accounts/templates/accounts",
-        "templates/registration",
-        "templates",
-        "tailwind/misc"
-      ],
-      "extensions": "html"
-    }
+  "name": "tailwind-tool",
+  "dependencies": {
+    "tailwindcss": "^3.0.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tailwindcss -i ./tailwind/style.css -o ./static/css/style.css --watch",
     "build": "tailwindcss -i ./tailwind/style.css -o ./static/css/style.css"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "autoprefixer": "^10.3.1",
-    "postcss-cli": "^8.3.1",
-    "tailwindcss": "3.0.0"
-  },
-  "devDependencies": {
-    "npm-watch": "^0.11.0"
   }
 }
