@@ -37,9 +37,7 @@ jobs:
         uses: nanasess/setup-chromedriver@v1.0.5
       - name: Tailwind compile
         run: |
-          cd tailwindcss
           npm i && npm run build
-          cd -
       - name: Running static file collection
         run: |
           poetry run python manage.py collectstatic --no-input
