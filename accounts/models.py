@@ -23,7 +23,7 @@ class User(AbstractUser):
 
 
 class OTP(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="otp")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     pin = models.CharField(max_length=6, blank=True)
 
     def save(self, *args, **kwargs):
@@ -33,7 +33,7 @@ class OTP(models.Model):
     def __str__(self):
         return str(self.pin)
 
-    @receiver(post_save, sender=User)  # add this
+    @receiver(post_save, sender=User)
     def create_otp(sender, instance, created, **kwargs):
         if created:
             OTP.objects.create(user=instance)

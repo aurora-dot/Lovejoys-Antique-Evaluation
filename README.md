@@ -24,8 +24,6 @@
     - `.pre-commit-config.yaml`
 - GitHub Actions
     - `.github/`
-    - `dev.env`
-    - `prod.env`
 - CSS generation files and folders:
     - `package.json`
     - `package-lock.json`
@@ -33,4 +31,3 @@
     - `static/css/style.css`
     - `tailwind.config.js`
     - `postcss.config.js`
-    - `node_modules`
