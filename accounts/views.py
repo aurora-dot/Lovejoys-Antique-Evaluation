@@ -98,6 +98,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 request.session["pk"] = user.pk
+                user.otp.save()
                 return redirect("verify/")
 
         return render(request, "accounts/login.html", data)
@@ -116,7 +117,7 @@ def verify_view(request):
             except User.DoesNotExist:
                 return Http404
 
-            otp, pin = user.otp, user.otp.pin
+            pin = user.otp.pin
 
             if not request.POST:
                 mail_subject = "Lovejoy Antiques: OTP"
@@ -128,7 +129,6 @@ def verify_view(request):
             if form.is_valid():
                 pin_input = form.cleaned_data.get("pin")
                 if pin_input == pin:
-                    otp.save()
                     login(request, user)
                     return redirect("app:index")
 
